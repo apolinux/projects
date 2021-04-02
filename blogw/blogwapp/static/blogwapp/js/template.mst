@@ -1,0 +1,25 @@
+<script id="test-mustc" type="x-tmpl-mustache">
+  Hello {{ name }}!
+</script>
+
+<div class="projectlist">
+  {{# projects }}
+      <!-- dynamic list of project items-->
+      <a href="{{ url_project_detail }}/{{ id }}/" class="project_detail list-group-item list-group-item-action" aria-current="true" data-url-detail="{{ url_project_detail }}/{{ id }}">
+        <div class="d-flex w-100 justify-content-between">
+          <h5 class="mb-1">
+          {{ name }}
+          </h5>
+          <small>{{ num_blogs }} items</small>
+        </div>
+        <p class="mb-1"> {{ blogs.0 }}</p>
+        {{# max_date }}
+        <small>hace {{ max_date | diffdaysnow }} dias</small>
+        {{/ max_date }}
+      </a>
+  {{/projects }}
+{{^projects }}
+    <p>No projects are available.</p>
+{{/projects}}  
+
+</div>

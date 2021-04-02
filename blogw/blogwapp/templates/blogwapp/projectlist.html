@@ -1,0 +1,28 @@
+{% load blogwapp_extras %}
+
+<div class="list-group" id="project_list_parent">
+  {% comment %}
+  {% if latest_question_list %}
+    {% for project in latest_question_list %}
+        <!-- dynamic list of project items-->
+        <a href="/blogwapp/{{ project.id }}/" class="project_detail list-group-item list-group-item-action" aria-current="true" data-url-detail="{% url 'blogwapp:blog-detail' project.id %}">
+          <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1">
+            {{ project.name  }}
+            </h5>
+            <small>{{ project.num_blogs }} items</small>
+          </div>
+          <p class="mb-1"> {{ project.first_blog.text }}</p>
+          {% if project.max_date %}
+          <small>hace {{ project.max_date | diffdaysnow }} dias</small>
+          {% endif %}
+        </a>
+    {% endfor %}    
+  {% else %}
+      <p>No projects are available.</p>
+  {% endif %}  
+  {% endcomment %}
+<script>
+ {# var  url_blog_list = '{% url "blog-detail" %}'  #}
+</script>
+</div>

@@ -9,14 +9,17 @@ function getUrl(selector){
   return url
 }
 
-// instance 
+// instance objects
 const Page = new PageC()
-const Project = new ProjectC('project_list_parent')
+const Project = new ProjectC('project_list_parent','project_detail')
 const Blog = new BlogC
 
 
 var url_blog_list = ''
 
+function show_alert(msg){
+  alert('Error:' + msg)
+}
 
 /*$(document).ready(function(){
   // reload page 
@@ -30,7 +33,7 @@ var url_blog_list = ''
     // load project detail
     load_proj_detail(this)
   })
-})*/
+})
 
 // load project detail
 function load_proj_detail(obj){
@@ -52,23 +55,6 @@ function load_proj_detail(obj){
   })
 }
 
-function show_alert(msg){
-  alert('Error:' + msg)
-}
-
-/*function write_proj_detail(data){
-  //console.log('data',data)
-  var info = data[0].fields
-  console.log('info',info)
-  $('#detail_title').html(info.name)
-  $('#detail_desc').html(info.description)
-  // @todo: pending...
-  $('#detail_date').html(info.creat_date)
-
-  // fill blog list 
-  fill_blog_list(info.id)
-}*/
-
 // list all blogs from project id
 function fill_blog_list(project_id){
   $.ajax({ 
@@ -85,3 +71,4 @@ function fill_blog_list(project_id){
     show_alert('Error getting project detail')
   })
 }
+*/

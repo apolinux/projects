@@ -6,16 +6,8 @@ window.onload = Page.reload
 // reloadMain
 document.getElementById('reload_page').addEventListener('click',Page.reload,false)
 
-// project list , called when reload page or update project/blog 
-//projectList.addEventListener(load,'onLoadProjectList',false);
-
 // on click Proyect
-// not working because getelements must be iterated
-//document.getElementsByClassName('detail_project').addEventListener('click',Project.detail,false);
-$('.detail_project').bind('click',Project.detail)
-
-//loadProyect
-//projectLoad.addEventListener(load,'onLoadProject',false)
+$('#project_list_parent').on('click','.project_detail',ProjectC.detailStatic)
 
 // createProyect
 document.getElementById('add_project').addEventListener('click',Project.add,false)
@@ -24,10 +16,10 @@ document.getElementById('add_project').addEventListener('click',Project.add,fals
 // updateProject.addEventListener(click,'onUpdateProject',false)
 
 //deleteProyect
-document.getElementById('delete_project').addEventListener('click',Project.delete,false)
+$('#delete_project').bind('click',Project.delete)
 
 // CreateBlog 
-document.getElementById('create_blog').addEventListener('click',Blog.add,false)
+$('#create_blog').bind('click',Blog.add)
 
 // updateBlog
 $('.update_blog').bind('click',Blog.update)

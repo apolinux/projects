@@ -1,9 +1,8 @@
 "use strict";
 
 // define classes 
-// class expressions
 
-const PageC = class{
+class PageC {
   // restrict to only one instance
   constructor(){
     if(PageC._instance){

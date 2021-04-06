@@ -2,12 +2,15 @@ from django.shortcuts import render
 
 # Create your views here.
 #from django.contrib.auth.models import User, Group
-from rest_framework import viewsets
+from rest_framework import viewsets,generics
 from rest_framework import permissions
-from projectapi.serializers import ProjectSerializer, BlogSerializer
+from projectapi.serializers import ProjectSerializer, BlogSerializer, BlogProjectSerializer
 from blogwapp.models import Project,Blog
 from django.db.models import Count,Max
 from datetime import datetime,timezone
+from rest_framework.decorators import action
+from rest_framework.response import Response
+from rest_framework.reverse import reverse
 
 class ProjectViewSet(viewsets.ModelViewSet):
     """
@@ -23,7 +26,6 @@ class ProjectViewSet(viewsets.ModelViewSet):
             last_modif =  Max('blogs__creat_date')
         )
 
-
 class BlogViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows groups to be viewed or edited.
@@ -32,7 +34,30 @@ class BlogViewSet(viewsets.ModelViewSet):
     serializer_class = BlogSerializer
     permission_classes = [permissions.IsAuthenticated]
 
+    def get_queryset(self):
+      projectid = self.request.query_params.get('project_id')
+      if projectid:
+      #except KeyError:
+        return Blog.objects.filter(project__id=projectid)
+      
+      return Blog.objects.all()
 
+      
+
+      
+
+
+"""class BlogProjectListView(generics.ListAPIView):
+  serializer_class = BlogProjectSerializer
+  permission_classes = [permissions.IsAuthenticated]
+  #filter_class = BlogPostListFilter
+  paginate_by = 10
+
+  def get_queryset(self):
+    return Blog.objects.filter(project_id=self.kwargs['project_id'])
+    """
+
+"""
 def date_diff_in_seconds(dt2, dt1):
   timedelta = dt2 - dt1
   return timedelta.days * 24 * 3600 + timedelta.seconds
@@ -53,3 +78,4 @@ def diffdaysnow(dt1):
     return ''
   dt2 = datetime.now(timezone.utc)
   return days_from_seconds(date_diff_in_seconds(dt2,dt1))   
+  """

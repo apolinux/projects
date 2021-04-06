@@ -3,7 +3,8 @@
   <div class="col">
     <!-- title -->
     <div class="row">
-      <div class="col">
+      <div class="col" id="project_detail">
+      {% comment %}
         <div class="d-flex justify-content-between">
           <h4 id="detail_title">mantenimiento de adminplat/servicio( change dynamically)</h4> 
           <a href="newitem.php" id="create_blog">
@@ -11,6 +12,7 @@
           </a>
           <button class="btn btn-success" id="delete_project">Delete</button>
         </div>
+      {% endcomment %}  
       </div>
     </div>
     <!-- search detail -->
@@ -18,11 +20,10 @@
       <input type="text" name="search_detail" placeholder="search in detail list">
     </div>
 
-    <!-- Description -->
-    <div id="detail_desc"></div>
-    <!--
-    <div class="list-group list-group-flush">
     
+    
+    <div class="list-group list-group-flush" id="blog_list">
+    {% comment %}
     <a href="#" class="list-group-item list-group-item-action">
     <small>10 de mayo de 2021 15:35</small>
       <div class="">
@@ -36,7 +37,7 @@
       Agregar un nuevo servidor para mozambique en db.php, subir al repo y a producción.
       </div>
     </a>
+    {% endcomment %}
     </div>
-    -->
   </div>
 </div>

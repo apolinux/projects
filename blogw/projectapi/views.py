@@ -30,7 +30,7 @@ class BlogViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows groups to be viewed or edited.
     """
-    queryset = Blog.objects.all()
+    queryset = Blog.objects.all().order_by('-creat_date')
     serializer_class = BlogSerializer
     permission_classes = [permissions.IsAuthenticated]
 
@@ -38,9 +38,9 @@ class BlogViewSet(viewsets.ModelViewSet):
       projectid = self.request.query_params.get('project_id')
       if projectid:
       #except KeyError:
-        return Blog.objects.filter(project__id=projectid)
+        return Blog.objects.filter(project__id=projectid).order_by('-creat_date')
       
-      return Blog.objects.all()
+      return Blog.objects.all().order_by('-creat_date')
 
       
 

@@ -1,28 +1,32 @@
-// add event listeners
+// event listeners
 
 //main
-window.onload = Page.reload 
+window.onload = PageC.reload 
 
 // reloadMain
-document.getElementById('reload_page').addEventListener('click',Page.reload,false)
+document.getElementById('reload_page').addEventListener('click',PageC.reload,false)
 
 // on click Proyect
-$('#project_list_parent').on('click','.project_detail',ProjectC.detailStatic)
+$('#tgt_project_list').on('click','.project_detail',ProjectC.detailStatic)
 
 // createProyect
-document.getElementById('add_project').addEventListener('click',Project.add,false)
+document.getElementById('project_add').addEventListener('click',ProjectC.add,false)
 
 //updateProyect, pending
 // updateProject.addEventListener(click,'onUpdateProject',false)
 
 //deleteProyect
-$('#delete_project').bind('click',Project.delete)
+$('#project_delete').bind('click',ProjectC.delete)
 
-// CreateBlog 
-$('#create_blog').bind('click',Blog.add)
+// CreateBlog : link for show new blog form
+$('#tgt_link_blog_create').on('click','#link_block_blog_create', BlogC.blockAddStatic)
+
+// link for submit blog
+$('#tgt_block_blog_create').on('click','#link_submit_blog_create',BlogC.postAddStatic)
 
 // updateBlog
-$('.update_blog').bind('click',Blog.update)
+$('.update_blog').bind('click',BlogC.update)
 
 // deleteBlog
-$('.delete_blog').bind('click',Blog.delete);
+$('.delete_blog').bind('click',BlogC.delete);
+

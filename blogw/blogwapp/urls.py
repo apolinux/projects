@@ -45,7 +45,7 @@ urlpatterns = [
   path('blog/<int:pk>/', views.BlogDetailView.as_view(), name='blog-detail'),
 
   # blogwapp/PROJ_ID/blog/create  => crear blog
-  path('<int:pk>/create/', views.BlogCreateView.as_view(), name='blog-create'),
+  path('<int:pk>/create/', views.BlogCreateView.as_view(), name='blog-add'),
 
   # blogwapp/ID/blog/update  => update blog
   path('blog/<int:pk>/update/', views.BlogUpdateView.as_view(), name='blog-update'),

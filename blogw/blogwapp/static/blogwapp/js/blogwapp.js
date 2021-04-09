@@ -1,6 +1,6 @@
 "use strict"
 
-
+// util functions 
 function getUrl(selector){
   var url = $(selector).data('url')
   if(url == '' || url == undefined){
@@ -9,66 +9,116 @@ function getUrl(selector){
   return url
 }
 
-// instance objects
-const Page = new PageC()
-const Project = new ProjectC('project_list_parent','project_detail')
-const Blog = new BlogC
-
-
-var url_blog_list = ''
-
 function show_alert(msg){
-  alert('Error:' + msg)
+  alert(msg)
 }
 
-/*$(document).ready(function(){
-  // reload page 
-  Page.reload()
+// get target of event 
+function getTargetEvent(event){
+  //return $(event.currentTarget)[0]
+  let curr = $(event.currentTarget)
+  return curr[0]
+}
 
-  // disable link and load project detail
-  $('a.project_detail').click(function(e){
-    e.preventDefault()
-    var link=this
+class HTML{
+  /**
+   * copy HTML from block_origin to target_css adding information from data parameter
+   * 
+   * @param {string} block_origin 
+   * @param {string} target_css 
+   * @param {object} data 
+   * @returns 
+   */
+  static writeExt(block_origin, target_css, data){
+    let template_part = HTML.getTemplate(block_origin)
+    let rendered = Mustache.render(template_part, data);
     
-    // load project detail
-    load_proj_detail(this)
-  })
-})
+    let target = HTML.getTarget(target_css)
 
-// load project detail
-function load_proj_detail(obj){
-  var url = obj.href
-  url_blog_list = $(obj).data('url-detail')
-  //console.log('load url',url)
-  $.ajax({ 
-    url: url ,
-    method: 'get',
-    dataType:'json'
-  }).done(function(data){
-    var data1 = JSON.parse(data)
-    write_proj_detail(data1)
-  })
-  .fail(function(a,b,c){
-    console.log('fail',a.responseText,a.status,b,c)
-    // @todo: show alert msg
-    show_alert('Error getting project detail')
-  })
+    target.innerHTML = rendered;    
+  }
+
+  static write(block_origin, data){
+    let target_css = block_origin
+    let template_part = HTML.getTemplate(block_origin)
+    let rendered = Mustache.render(template_part, data);
+    
+    let target = HTML.getTarget(target_css)
+
+    target.innerHTML = rendered;    
+  }
+
+  static getTemplate(block_origin){
+    let filter1 ="#template-mst #tpl_"+ block_origin
+    let template_part = $(filter1).html()
+    
+    if( template_part == undefined){
+      //show_alert('Error template for filter "'+ filter1 + '" is empty')  
+      console.log('the CSS filter for template is empty',filter1)
+      throw new Error('The CSS filter for template "' + filter1 + '" is empty')
+    }
+
+    return template_part
+  }
+
+  static getTarget(css){
+    let targetstr = "tgt_" + css
+    let target = document.getElementById(targetstr)
+    if(target == undefined){
+      //show_alert('error, target:' + targetstr + ' does not exists')
+      console.log('target not exists',targetstr)
+      throw new Error('The target "' + targetstr + '" does not exists')
+    }
+    return target 
+  }
+
+  static clear(target_css){
+    let target = HTML.getTarget(target_css)
+    target.innerHTML = '';    
+  }
+}
+class Webservice{
+  static call(url,data,callable_ok, callable_fail, method){
+    let ajax_data = { 
+      url: url ,
+      method: method ,
+      dataType:'json'
+    }
+    if(data){
+      ajax_data.data = data
+    }
+    return $.ajax(ajax_data).done(function(data){
+      callable_ok(data)
+    })
+    .fail(function(a,b,c){
+      callable_fail(a,b,c)
+    })
+  }
+
+  static cGet(url,callable, callable_fail){
+    return this.call(url,null,callable, callable_fail,'get')
+  }
+
+  static cPost(url,data, callable, callable_fail){
+    return this.call(url,data, callable, callable_fail,'post')
+  }
 }
 
-// list all blogs from project id
-function fill_blog_list(project_id){
-  $.ajax({ 
-    url: url_blog_list ,
-    method: 'get',
-    dataType:'json'
-  }).done(function(data){
-    var data1 = JSON.parse(data)
-    write_proj_detail(data1)
-  })
-  .fail(function(a,b,c){
-    console.log('fail',a.responseText,a.status,b,c)
-    // @todo: show alert msg
-    show_alert('Error getting project detail')
-  })
+class WebserviceBW extends Webservice{
+  static fail(a,b,c){
+    console.log('fail calling Ws',a,a.responseText,a.status,b,c)
+    show_alert('Error getting information:' + a.responseText.substr(0,100))
+  }
+  static cGet(url,callable){
+    super.cGet(url,callable,WebserviceBW.fail)
+  }
+
+  static cPost(url,data,callable){
+    super.cPost(url,data,callable,WebserviceBW.fail)
+  }
 }
-*/
+
+const $WB = WebserviceBW
+const $H = HTML
+
+

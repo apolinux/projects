@@ -28,13 +28,12 @@
       <div class="col">
         <div class="d-flex justify-content-between">
           <h3>Blog list</h3>
-          <a href="newblog.php" id="add_project">
+          <a href="{% url 'blogwapp:project-add' %}" id="project_add">
             <i class="bi-plus-circle-fill" style="font-size: 2rem; color:chartreuse"></i>
           </a>
         </div>
         <!-- list begin -->
-        {#% include "./projectlist.html" %#}
-        <div class="list-group" id="project_list_parent">
+        <div class="list-group" id="tgt_project_list">
         </div>
       <!-- end list group -->
 

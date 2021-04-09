@@ -8,7 +8,7 @@ from django.urls import reverse
 class Project(models.Model):
   name = models.CharField(max_length=200)
   title = models.CharField(max_length=200)
-  creat_date= models.DateTimeField('date created')
+  creat_date= models.DateTimeField('date created', default=timezone.now)
   description = models.CharField(max_length=2000)
 
   def __str__(self):
@@ -23,7 +23,7 @@ class Project(models.Model):
 
 class Blog(models.Model):
   project = models.ForeignKey(Project, related_name='blogs',on_delete=models.CASCADE)
-  creat_date = models.DateTimeField('date created', default=timezone.now())
+  creat_date = models.DateTimeField('date created', default=timezone.now)
   text = models.CharField(max_length=200)
 
   def __str__(self):

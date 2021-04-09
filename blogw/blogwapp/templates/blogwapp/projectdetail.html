@@ -3,7 +3,7 @@
   <div class="col">
     <!-- title -->
     <div class="row">
-      <div class="col" id="project_detail">
+      <div class="col" id="tgt_project_detail">
       {% comment %}
         <div class="d-flex justify-content-between">
           <h4 id="detail_title">mantenimiento de adminplat/servicio( change dynamically)</h4> 
@@ -16,13 +16,24 @@
       </div>
     </div>
     <!-- search detail -->
-    <div class="row">
-      <input type="text" name="search_detail" placeholder="search in detail list">
+    <div class="row justify-content-between align-middle">
+     <div class="col-10">
+      <input class="form-control" type="text" name="search_detail" placeholder="search in blogs">
+     </div>
+     <div class="col text-end" id="tgt_link_blog_create">
+      {% comment %}
+       <a href="{% url 'blogwapp:blog-add' %}" id="create_blog"> #}
+        <i class="bi-plus-circle-fill" style="font-size: 2rem; color:chartreuse"  title="new Blog"></i>
+       </a>
+      {% endcomment %} 
+     </div>  
     </div>
 
+    <div class="row" id="tgt_block_blog_create">
+    </div>
+    <span id="csrf_token" style="display:none">{% csrf_token %}</span>
     
-    
-    <div class="list-group list-group-flush" id="blog_list">
+    <div class="list-group list-group-flush" id="tgt_blog_list">
     {% comment %}
     <a href="#" class="list-group-item list-group-item-action">
     <small>10 de mayo de 2021 15:35</small>

@@ -1,6 +1,10 @@
 {%verbatim%}
 <div id="template-mst" style="display:none">
-  <div id="projectlist">
+<!-- templates id name's must follow rule:
+ tpl_MODULE_ACTION, example:
+ tpl_project_list 
+ -->
+  <div id="tpl_project_list">
     {{# . }}
         <!-- dynamic list of project items-->
         <a href="{{ url }}" class="project_detail list-group-item list-group-item-action" aria-current="true" data-id="{{ id }}">
@@ -22,20 +26,25 @@
 
   </div>
 
-<div class="row" id="projectdetail">
+<div id="tpl_project_detail">
+ <div class="border-bottom">
   <div class="d-flex justify-content-between">
     <h4 id="detail_title">{{ name }}</h4> 
-    <a href="newitem.php" id="create_blog">
+    <!-- <a href="{{ url_new_blog }}" id="create_blog">
       <i class="bi-plus-circle-fill" style="font-size: 2rem; color:chartreuse"  title="new Blog"></i>
+    </a> -->
+    <!-- <button class="btn btn-success" id="delete_project">Delete</button> -->
+    <a href="{{ url_delete_project }}" id="delete_project">
+      <i class="bi-x-circle-fill" style="font-size: 1.5rem; color:red"  title="Delete this project"></i>
     </a>
-    <button class="btn btn-success" id="delete_project">Delete</button>
   </div>
 
   <!-- Description -->
-    <div id="detail_desc">{{ description }}</div>
+  <div id="detail_desc">{{ description }}</div>
+ </div>   
 </div>
 
-<div id="bloglist">
+<div id="tpl_blog_list">
   {{# .}}
   <a href="#" class="list-group-item list-group-item-action">
   <small>{{ creat_date }} </small>
@@ -49,51 +58,24 @@
   {{/.}}
 </div>
 
-  <div class="row" id="projectdetail--delete">
-    <!-- detail 1 - datetime1 -->
-    <div class="col">
-      <!-- title -->
-      <div class="row">
-        <div class="col">
-          <div class="d-flex justify-content-between">
-            <h4 id="detail_title">{{ name }}</h4> 
-            <a href="newitem.php" id="create_blog">
-              <i class="bi-plus-circle-fill" style="font-size: 2rem; color:chartreuse"  title="new Blog"></i>
-            </a>
-            <button class="btn btn-success" id="delete_project">Delete</button>
-          </div>
-        </div>
-      </div>
-      <!-- search detail -->
-      <div class="row">
-        <input type="text" name="search_detail" placeholder="search in detail list">
-      </div>
+<div id="tpl_link_blog_create">
+  <a href="{{ url }}" id="link_block_blog_create" data-project-id="{{id }}"> 
+    <i class="bi-plus-circle-fill" style="font-size: 2rem; color:chartreuse"  title="New Blog"></i>
+  </a>
+</div>
 
-      <!-- Description -->
-      <div id="detail_desc">{{ description }}</div>
-
-      <!-- begin list blogs  -->
-      <div class="list-group list-group-flush">
-        {{# blogs}}
-        <a href="#" class="list-group-item list-group-item-action">
-        <small>{{ creat_date }} 10 de mayo de 2021 15:35</small>
-          <div class="">
-          {{ text }} modificación de ServiceController.php. Subida al repo, pendiente revisar en producción.
-          </div>
-        </a>
-        {{/ blogs}}
-        <!-- <a href="#" class="list-group-item list-group-item-action">
-          <small>11 de mayo de 2021 16:10</small>
-          <div class="">
-          Agregar un nuevo servidor para mozambique en db.php, subir al repo y a producción.
-          </div>
-        </a> -->
-      </div> 
-        <!-- end list blogs -->
-    </div>
+<div id="tpl_block_blog_create">
+  <div class="col">
+    <form method="post" action="{{ url }}">
+      <label for="blog">New Blog</label>
+      <textarea class="form-control" name="text" placeholder="write new text here" rows="2" cols="60" ></textarea>
+      {{{ csrf }}}
+      <button type="button" class="btn btn-success" id="link_submit_blog_create">Add Blog</button>
+      <input type="hidden" name="project_id" value="{{ project_id }}">
+    </form>
   </div>
-  <!-- end project detail-->
-  
+</div>
+
 </div>
 <!-- parent hidden-->
 {%endverbatim%}

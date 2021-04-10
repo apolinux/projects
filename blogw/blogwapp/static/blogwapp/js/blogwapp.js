@@ -20,6 +20,31 @@ function getTargetEvent(event){
   return curr[0]
 }
 
+function getCsrfHtml(){
+  return $('#csrf_token').html()
+}
+
+/*function getCsrf(){
+  return $('#csrf_token input').val()
+}*/
+
+function getCookie(name) {
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== '') {
+      const cookies = document.cookie.split(';');
+      for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          // Does this cookie string begin with the name we want?
+          if (cookie.substring(0, name.length + 1) === (name + '=')) {
+              cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+              break;
+          }
+      }
+  }
+  return cookieValue;
+}
+const CSRFTOKEN = getCookie('csrftoken');
+
 class HTML{
   /**
    * copy HTML from block_origin to target_css adding information from data parameter
@@ -82,7 +107,8 @@ class Webservice{
     let ajax_data = { 
       url: url ,
       method: method ,
-      dataType:'json'
+      dataType:'json',
+      headers: {'X-CSRFToken': CSRFTOKEN}
     }
     if(data){
       ajax_data.data = data
@@ -115,6 +141,10 @@ class WebserviceBW extends Webservice{
 
   static cPost(url,data,callable){
     super.cPost(url,data,callable,WebserviceBW.fail)
+  }
+
+  static callBw(url,data,callable,method){
+    super.call(url,data,callable,WebserviceBW.fail,method)
   }
 }
 

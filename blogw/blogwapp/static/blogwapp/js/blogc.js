@@ -6,10 +6,10 @@ class BlogC{
     $WB.cGet(object.url_blogs, BlogCWrite.list)
   }
 
-  static create(event ){
+  /*static create(event ){
     event.preventDefault()
     console.log('event',event)
-  }
+  }*/
 
   /**
    * add a new blog 
@@ -37,14 +37,30 @@ class BlogC{
   }
 
   static onAdded(data){
-    //console.log('added blog data:',data)
     // update project list and so on
     ProjectC.loadList()
   }
 
   static update(){}
 
-  static delete(){}
+  static delete(event){
+    // warn user
+    if(! confirm('Really want to delete this item?')){
+      return 
+    }
+    let item = getTargetEvent(event)
+    let url = $(item).data('url_delete_blog')
+    //ondelete 
+    let data = {
+      csrfmiddlewaretoken:CSRFTOKEN
+    }
+
+    $WB.callBw(url,data,BlogC.onDeleted,'delete')
+  }
+
+  static onDeleted(data){
+    ProjectC.loadList()
+  }
 
   static search(){}
 }
@@ -84,7 +100,8 @@ class BlogCWrite{
 
     $H.write('block_blog_create',{
       url        : item.href,
-      csrf       : $('#csrf_token').html(),
+      //csrf       : $('#csrf_token').html(),
+      csrf : getCsrfHtml(),
       project_id : project_id
     })
   }

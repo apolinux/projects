@@ -3,6 +3,8 @@
 class ProjectC {
 
   static loadList(){
+    $H.clear('block_project_create')
+
     const url = getUrl('#reload_page')
     $WB.cGet(url,ProjectC.writeProject)
   }
@@ -42,11 +44,50 @@ class ProjectC {
     BlogCWrite.addUrl(project)
   }
 
-  static add(){}
+  static add(event){
+    event.preventDefault()
+    let item = getTargetEvent(event)
+
+    // create html block
+    ProjectWriteC.add(item)
+  }
+
+  static postAdd(event){
+    event.preventDefault()
+    //console.log('post add',event)
+
+    let item = getTargetEvent(event)
+
+    let form_data = $(item.form).serialize()
+    let url = item.form.action
+    
+    $WB.cPost(url, form_data, BlogC.onAdded)
+  }
+
+  static onAdded(data){
+    // clear block
+    
+    // update project list and so on
+    ProjectC.loadList()
+  }
 
   static update(){}
 
-  static delete(){}
+  static delete(event){
+    event.preventDefault()
+    if(! confirm('Really want to delete this item?')){
+      return 
+    }
+
+    let item = getTargetEvent(event)
+    let url = item.href
+    
+    $WB.callBw(url,{},ProjectC.onDeleted,'delete')
+  }
+
+  static onDeleted(data){
+    ProjectC.loadList()
+  }
 
   static search(){}
 }
@@ -58,5 +99,12 @@ let ProjectWriteC = class{
 
   static detail(info){
     $H.write('project_detail', info)
+  }
+
+  static add(item){
+    $H.write('block_project_create',{
+      url  : item.href,
+      csrf : getCsrfHtml(),
+    })
   }
 }

@@ -24,7 +24,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
         return Project.objects.annotate(
             num_blogs=Count('blogs'),
             last_modif =  Max('blogs__creat_date')
-        )
+        ).order_by('-update_date')
 
 class BlogViewSet(viewsets.ModelViewSet):
     """

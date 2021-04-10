@@ -10,6 +10,7 @@ class Project(models.Model):
   title = models.CharField(max_length=200)
   creat_date= models.DateTimeField('date created', default=timezone.now)
   description = models.CharField(max_length=2000)
+  update_date = models.DateTimeField('date updated',auto_now=True)
 
   def __str__(self):
     return self.name
@@ -25,6 +26,7 @@ class Blog(models.Model):
   project = models.ForeignKey(Project, related_name='blogs',on_delete=models.CASCADE)
   creat_date = models.DateTimeField('date created', default=timezone.now)
   text = models.CharField(max_length=200)
+  update_date = models.DateTimeField('date updated', auto_now=True)
 
   def __str__(self):
     return self.text

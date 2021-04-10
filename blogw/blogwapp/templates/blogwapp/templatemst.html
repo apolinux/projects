@@ -6,7 +6,7 @@
  -->
   <div id="tpl_project_list">
     {{# . }}
-        <!-- dynamic list of project items-->
+        <!-- list of project items-->
         <a href="{{ url }}" class="project_detail list-group-item list-group-item-action" aria-current="true" data-id="{{ id }}">
           <div class="d-flex w-100 justify-content-between">
             <h5 class="mb-1">
@@ -15,9 +15,11 @@
             <small>{{ num_blogs }} items</small>
           </div>
           <p class="mb-1"> {{ last_blog.text }}</p>
-          {{# days_ago }}
-          <small>hace {{ days_ago }} dias</small>
-          {{/ days_ago }}
+          {{!  { {# days_ago } }
+           <small>hace { { days_ago  } } dias</small>  
+          { {/ days_ago } }
+          }}
+          <small>{{ days_ago }}</small>
         </a>
     {{/. }}
     {{^. }}
@@ -26,15 +28,30 @@
 
   </div>
 
+<div id="tpl_block_project_create">
+ <!-- <div class="col">-->
+    <form method="post" action="{{ url }}">
+      <div class="mb-3">
+      <label for="name">Name</label>
+      <input class="form-control" type="text" name="name" placeholder="Write name of project">
+      </div>
+
+      <div class="mb-3">
+        <label for="description">Description</label>
+        <textarea class="form-control" name="description" placeholder="write new text here" rows="2" cols="60" ></textarea>
+      </div>
+
+      {{{ csrf }}}
+      <button type="button" class="btn btn-success" id="link_submit_project_create">Add Project</button>
+    </form>
+  <!-- </div> -->
+</div>
+
 <div id="tpl_project_detail">
  <div class="border-bottom">
   <div class="d-flex justify-content-between">
     <h4 id="detail_title">{{ name }}</h4> 
-    <!-- <a href="{{ url_new_blog }}" id="create_blog">
-      <i class="bi-plus-circle-fill" style="font-size: 2rem; color:chartreuse"  title="new Blog"></i>
-    </a> -->
-    <!-- <button class="btn btn-success" id="delete_project">Delete</button> -->
-    <a href="{{ url_delete_project }}" id="delete_project">
+    <a href="{{ url_project_delete }}" id="link_project_delete">
       <i class="bi-x-circle-fill" style="font-size: 1.5rem; color:red"  title="Delete this project"></i>
     </a>
   </div>
@@ -47,10 +64,17 @@
 <div id="tpl_blog_list">
   {{# .}}
   <a href="#" class="list-group-item list-group-item-action">
-  <small>{{ creat_date }} </small>
-    <div class="">
-    {{ text }} 
+  <div class="row justify-content-between">
+    <div class="col">
+      <small>{{ creat_date }} </small>
     </div>
+    <div class="col-2 text-end link_delete_blog" data-url_delete_blog="{{ url_delete_blog }}">
+      <i class="bi-x-circle-fill" style="font-size: 1rem; color:red"  title="Delete this Blog"></i>
+    </div>
+  </div>  
+  <div class="">
+    {{ text }} 
+  </div>
   </a>
   {{/ .}}
   {{^.}}

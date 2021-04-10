@@ -11,6 +11,8 @@
   <link href="{% static 'blogwapp/bootstrap-5.0.0-beta2-dist/css/bootstrap.min.css' %}" rel="stylesheet" crossorigin="anonymous">
   <link href="{% static 'blogwapp/font/bootstrap-icons.css' %}" rel="stylesheet">
   <title>Blog Manager - Apolinux</title>
+  <link rel="shortcut icon" href="{% static 'favicon.ico'%}" type="image/x-icon">
+  <link rel="icon" href="{% static 'favicon.ico'%}" type="image/x-icon">
 </head>
 
 <body>
@@ -28,10 +30,13 @@
       <div class="col">
         <div class="d-flex justify-content-between">
           <h3>Blog list</h3>
-          <a href="{% url 'blogwapp:project-add' %}" id="project_add">
+          <a href="{% url 'projectapi:project-list' %}" id="project_add">
             <i class="bi-plus-circle-fill" style="font-size: 2rem; color:chartreuse"></i>
           </a>
         </div>
+
+        <div id="tgt_block_project_create"></div>
+
         <!-- list begin -->
         <div class="list-group" id="tgt_project_list">
         </div>

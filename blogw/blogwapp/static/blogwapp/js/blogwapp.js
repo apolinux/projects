@@ -13,20 +13,30 @@ function show_alert(msg){
   alert(msg)
 }
 
-// get target of event 
-function getTargetEvent(event){
-  //return $(event.currentTarget)[0]
-  let curr = $(event.currentTarget)
-  return curr[0]
+function targetFromEvent(event,prevent,stop_propagation){
+  if(prevent == undefined){
+    prevent = true 
+  }
+
+  if(prevent == true){
+    event.preventDefault()
+  }
+
+  if(stop_propagation == undefined){
+    stop_propagation = false
+  }
+  
+  if(stop_propagation){
+    event.stopPropagation()
+  }
+
+  let item = $(event.currentTarget)
+  return item[0]
 }
 
 function getCsrfHtml(){
   return $('#csrf_token').html()
 }
-
-/*function getCsrf(){
-  return $('#csrf_token input').val()
-}*/
 
 function getCookie(name) {
   let cookieValue = null;
@@ -43,9 +53,19 @@ function getCookie(name) {
   }
   return cookieValue;
 }
-const CSRFTOKEN = getCookie('csrftoken');
 
 class HTML{
+
+  /**
+   * @todo reengineering later in other methods
+   * @param {*} origin 
+   * @param {*} data 
+   * @returns 
+   */
+  static render(origin,data){
+    let template_part = HTML.getTemplate(origin)
+    return Mustache.render(template_part, data);
+  }
   /**
    * copy HTML from block_origin to target_css adding information from data parameter
    * 
@@ -64,17 +84,12 @@ class HTML{
   }
 
   static write(block_origin, data){
-    let target_css = block_origin
-    let template_part = HTML.getTemplate(block_origin)
-    let rendered = Mustache.render(template_part, data);
-    
-    let target = HTML.getTarget(target_css)
-
-    target.innerHTML = rendered;    
+    return this.writeExt(block_origin, block_origin, data)
   }
 
   static getTemplate(block_origin){
-    let filter1 ="#template-mst #tpl_"+ block_origin
+    //let filter1 ="#template-mst #tpl_"+ block_origin
+    let filter1 ="#" + TEMPLATE_BLOCK_ID +" #" + PREFIX_ORIGIN + block_origin
     let template_part = $(filter1).html()
     
     if( template_part == undefined){
@@ -87,7 +102,8 @@ class HTML{
   }
 
   static getTarget(css){
-    let targetstr = "tgt_" + css
+    //let targetstr = "tgt_" + css
+    let targetstr = PREFIX_TARGET + css
     let target = document.getElementById(targetstr)
     if(target == undefined){
       //show_alert('error, target:' + targetstr + ' does not exists')
@@ -100,6 +116,18 @@ class HTML{
   static clear(target_css){
     let target = HTML.getTarget(target_css)
     target.innerHTML = '';    
+  }
+
+  static removeForms(){
+    $('.container .form_modify').remove()
+  }
+
+  /**
+   * set the create block status to false for project and blog 
+   */
+  static resetCreateBlocks(){
+    ProjectC.resetCreateBlk()
+    BlogC.resetCreateBlk()
   }
 }
 class Webservice{
@@ -148,7 +176,11 @@ class WebserviceBW extends Webservice{
   }
 }
 
+// global constants
 const $WB = WebserviceBW
 const $H = HTML
-
+const CSRFTOKEN = getCookie('csrftoken');
+const PREFIX_TARGET = 'tgt_'
+const PREFIX_ORIGIN = 'tpl_'
+const TEMPLATE_BLOCK_ID = 'template-mst'
 

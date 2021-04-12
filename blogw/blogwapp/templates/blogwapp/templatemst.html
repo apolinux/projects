@@ -9,9 +9,10 @@
         <!-- list of project items-->
         <a href="{{ url }}" class="project_detail list-group-item list-group-item-action" aria-current="true" data-id="{{ id }}">
           <div class="d-flex w-100 justify-content-between">
-            <h5 class="mb-1">
+            <h5 class="mb-1 project_detail_text">
             {{ name }}
             </h5>
+            <div class="project_detail_description" style="display:none">{{ description }}</div>
             <small>{{ num_blogs }} items</small>
           </div>
           <p class="mb-1"> {{ last_blog.text }}</p>
@@ -19,7 +20,17 @@
            <small>hace { { days_ago  } } dias</small>  
           { {/ days_ago } }
           }}
-          <small>{{ days_ago }}</small>
+          <div class="row justify-content-between">
+            <div class="col">
+              <small>{{ days_ago }}</small>
+            </div>
+
+            <div class="col text-end link_project_edit" data-url_edit="{{ url_project_edit }}">
+             <span class="badge bg-primary">
+              <i class="bi bi-pencil-fill" ></i>
+              </span>
+            </div>
+          </div>  
         </a>
     {{/. }}
     {{^. }}
@@ -29,8 +40,7 @@
   </div>
 
 <div id="tpl_block_project_create">
- <!-- <div class="col">-->
-    <form method="post" action="{{ url }}">
+    <form method="post" action="{{ url }}" class="form_modify">
       <div class="mb-3">
       <label for="name">Name</label>
       <input class="form-control" type="text" name="name" placeholder="Write name of project">
@@ -44,7 +54,24 @@
       {{{ csrf }}}
       <button type="button" class="btn btn-success" id="link_submit_project_create">Add Project</button>
     </form>
-  <!-- </div> -->
+</div>
+
+<div id="tpl_block_project_update">
+    <form method="put" action="{{ url }}" class="form_modify">
+      <div class="mb-3">
+      <label for="name">Name</label>
+      <input class="form-control" type="text" name="name" placeholder="Write name of project" value={{text}}>
+      </div>
+
+      <div class="mb-3">
+        <label for="description">Description</label>
+        <textarea class="form-control" name="description" placeholder="write new text here" rows="2" cols="60" >{{ description }}</textarea>
+      </div>
+
+      {{{ csrf }}}
+      <button type="button" class="btn btn-success link_submit_project_update">Update Project</button>
+      <button type="button" class="btn btn-warning link_cancel_project_update">Cancel</button>
+    </form>
 </div>
 
 <div id="tpl_project_detail">
@@ -63,15 +90,23 @@
 
 <div id="tpl_blog_list">
   {{# .}}
-  <a href="#" class="list-group-item list-group-item-action">
+  <a href="{{ url }}" class="list-group-item list-group-item-action">
   <div class="row justify-content-between">
     <div class="col">
       <small>{{ creat_date }} </small>
     </div>
+    
+    <div class="col text-end link_blog_edit" data-url_edit="{{ url_blog_edit }}">
+      <span class="badge bg-primary">
+      <i class="bi bi-pencil-fill" ></i>
+      </span>
+    </div>
+
     <div class="col-2 text-end link_delete_blog" data-url_delete_blog="{{ url_delete_blog }}">
       <i class="bi-x-circle-fill" style="font-size: 1rem; color:red"  title="Delete this Blog"></i>
     </div>
   </div>  
+  <div class="blog_detail_text" style="display:none">{{ text }}</div>
   <div class="">
     {{ text }} 
   </div>
@@ -88,17 +123,34 @@
   </a>
 </div>
 
-<div id="tpl_block_blog_create">
-  <div class="col">
+<div id="tpl_block_blog_create"> 
+  <div class="col form_modify">
     <form method="post" action="{{ url }}">
-      <label for="blog">New Blog</label>
-      <textarea class="form-control" name="text" placeholder="write new text here" rows="2" cols="60" ></textarea>
-      {{{ csrf }}}
+      <div class="mb-3">
+        <label for="blog">New Blog</label>
+        <textarea class="form-control" name="text" placeholder="write new text here" rows="2" cols="60" ></textarea>
+      </div>
       <button type="button" class="btn btn-success" id="link_submit_blog_create">Add Blog</button>
       <input type="hidden" name="project_id" value="{{ project_id }}">
+      {{{ csrf }}}
     </form>
   </div>
 </div>
+
+<div id="tpl_block_blog_update"> 
+  <div class="col form_modify">
+    <form method="post" action="{{ url }}">
+      <div class="mb-3">
+        <label for="blog">Update Blog</label>
+        <textarea class="form-control" name="text" placeholder="write new text here" rows="2" cols="60" >{{ text }}</textarea>
+      </div>
+      <button type="button" class="btn btn-success link_submit_blog_update">Update Blog</button>
+      <button type="button" class="btn btn-warning link_cancel_blog_update">Cancel</button>
+      {{{ csrf }}}
+    </form>
+  </div>
+</div>
+
 
 </div>
 <!-- parent hidden-->

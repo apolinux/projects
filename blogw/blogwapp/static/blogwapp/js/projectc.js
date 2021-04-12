@@ -1,9 +1,11 @@
 "use strict"
 
-class ProjectC {
+class ProjectC extends Model {
 
+  static block_create_name = 'block_project_create'
+  
   static loadList(){
-    $H.clear('block_project_create')
+    $H.clear(this.block_create_name)
 
     const url = getUrl('#reload_page')
     $WB.cGet(url,ProjectC.writeProject)
@@ -21,9 +23,7 @@ class ProjectC {
   }
 
   static detailStatic(event){
-    event.preventDefault()
-    //let itemclicked = $(event.currentTarget)[0]
-    let itemclicked = getTargetEvent(event)
+    let itemclicked = targetFromEvent(event)
     // get object data 
     let target = itemclicked.href
     ProjectC.detailFromAjax(target)
@@ -45,18 +45,19 @@ class ProjectC {
   }
 
   static add(event){
-    event.preventDefault()
-    let item = getTargetEvent(event)
+    let item = targetFromEvent(event)
 
+    ProjectC.showList()
+    // EYE: can't use this for call methods here because is called from an Event
+    if(! ProjectC.mustCreateBlock()) { 
+      return 
+    }
     // create html block
     ProjectWriteC.add(item)
   }
 
   static postAdd(event){
-    event.preventDefault()
-    //console.log('post add',event)
-
-    let item = getTargetEvent(event)
+    let item = targetFromEvent(event)
 
     let form_data = $(item.form).serialize()
     let url = item.form.action
@@ -65,21 +66,56 @@ class ProjectC {
   }
 
   static onAdded(data){
-    // clear block
-    
-    // update project list and so on
-    ProjectC.loadList()
+    PageC.reload()
   }
 
-  static update(){}
+  static edit(event){
+    let item = targetFromEvent(event,true,true)
+    // create update template 
+    ProjectWriteC.edit(item)
+  }
+
+  static cancelUpdate(event){
+    let item = targetFromEvent(event)
+
+    let block = $(item).parent()
+    ProjectC.showList()
+
+    block.remove()
+  }
+
+  static showList(){
+    super.showChildren('#' +   PREFIX_TARGET + 'project_list')
+  }
+
+  static postUpdate(event){
+    let item = targetFromEvent(event)
+    // submit 
+    let form_data = $(item.form).serialize()
+    let url = item.form.action
+    
+    $WB.callBw(url, form_data, ProjectC.onUpdated,'put')
+  }
+
+  /**
+   * actions:
+   * - remove modify form(s) 
+   * - reload page 
+   * @param {*} data 
+   */
+  static onUpdated(data){
+    $H.removeForms()
+    $H.resetCreateBlocks()
+    ProjectC.showList()
+    PageC.reload()
+  }
 
   static delete(event){
-    event.preventDefault()
+    let item = targetFromEvent(event)
     if(! confirm('Really want to delete this item?')){
       return 
     }
 
-    let item = getTargetEvent(event)
     let url = item.href
     
     $WB.callBw(url,{},ProjectC.onDeleted,'delete')
@@ -102,9 +138,46 @@ let ProjectWriteC = class{
   }
 
   static add(item){
+    $H.removeForms()
+
     $H.write('block_project_create',{
       url  : item.href,
       csrf : getCsrfHtml(),
     })
+  }
+
+  /**
+   * edit project item 
+   * 
+   * - se obtiene el div objeto padre
+   * - se agrega el update form en el nodo anterior con .before
+   * - se oculta el div objeto (con hide() )
+   * si hace submit, se quita el form y se actualizar
+   * si hace cancel, se quita el form y reaparece el div objeto(con show)
+   * @param {*} item 
+   */
+  static edit(item){
+    // 1. get dom object to edit 
+    let block_project = $(item).parent().parent()
+    
+    $H.removeForms()
+
+    ProjectC.showList()
+    // 2. get previous neighbour or parent 
+    // 3. crear div con el formulario 
+    // los detalles se obtienen del html existente
+    const data ={
+      url : block_project.attr('href') ,
+      text : $(block_project).find('.project_detail_text').html().trim() ,
+      description : $(block_project).find('.project_detail_description').html().trim()
+    }
+
+    // 4. add formulary block to this parent 
+    let html_update = $H.render('block_project_update',data)
+    
+    $(block_project).before(html_update)
+    
+    // hide current detail block 
+    block_project.hide()
   }
 }

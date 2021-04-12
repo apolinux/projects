@@ -7,9 +7,11 @@ class BlogSerializer(serializers.HyperlinkedModelSerializer):
   project_id = serializers.IntegerField()
   creat_date = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S", required=False, read_only=True)
   url_delete_blog = serializers.SerializerMethodField()
+  url = serializers.HyperlinkedIdentityField(
+        view_name='projectapi:blog-detail',read_only=True) 
   class Meta:
     model = Blog
-    fields = ['id', 'text', 'project_id','creat_date','url_delete_blog'] 
+    fields = ['id', 'text', 'project_id','creat_date','url_delete_blog','url'] 
 
   def get_url_delete_blog(self,obj):
     request = self.context.get('request')

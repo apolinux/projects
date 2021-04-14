@@ -12,20 +12,35 @@ class ProjectC extends Model {
   }
 
   // write to html
-  static writeProject(data){
-    ProjectWriteC.list(data)
+  static writeProject(prj_list){
+    ProjectWriteC.list(prj_list)
+    
+    let project = ProjectC.getCurrent(prj_list)
 
-    ProjectC.detail(data[0])
+    ProjectC.detail(project)
+  }
+
+  static getCurrent(prj_list){
+    let project = prj_list[0]
+    // filter by id 
+    if(current_prj_id !== undefined ){
+      let new_list = prj_list.filter(function(item){
+        return item.id == current_prj_id
+      })
+      project = new_list[0]
+    }
+    return project 
   }
 
   static detailFromAjax(url){
     $WB.cGet(url,ProjectC.detail)
   }
 
-  static detailStatic(event){
+  static onDetail(event){
     let itemclicked = targetFromEvent(event)
-    // get object data 
     let target = itemclicked.href
+    //console.log('on prj detail,itemclicked',itemclicked)
+    current_prj_id = $(itemclicked).data('id')
     ProjectC.detailFromAjax(target)
   }
 
@@ -37,11 +52,8 @@ class ProjectC extends Model {
   static detail(project){
     // the two links below are called each time project is selected 
     ProjectWriteC.detail(project)
-    // get blog list 
-    BlogC.list(project)
-
-    // add url for add blog 
-    BlogCWrite.addUrl(project)
+    BlogC.detail(project)
+    
   }
 
   static add(event){
@@ -62,10 +74,11 @@ class ProjectC extends Model {
     let form_data = $(item.form).serialize()
     let url = item.form.action
     
-    $WB.cPost(url, form_data, BlogC.onAdded)
+    $WB.cPost(url, form_data, ProjectC.onAdded)
   }
 
   static onAdded(data){
+    $H.resetCreateBlocks()
     PageC.reload()
   }
 
@@ -116,13 +129,15 @@ class ProjectC extends Model {
       return 
     }
 
-    let url = item.href
+    //let url = item.href
+    let url = $(item).data('url_delete')
     
     $WB.callBw(url,{},ProjectC.onDeleted,'delete')
   }
 
   static onDeleted(data){
-    ProjectC.loadList()
+    //ProjectC.loadList()
+    PageC.reload()
   }
 
   static search(){}

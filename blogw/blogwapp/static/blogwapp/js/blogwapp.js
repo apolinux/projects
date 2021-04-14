@@ -10,7 +10,14 @@ function getUrl(selector){
 }
 
 function show_alert(msg){
-  alert(msg)
+  //alert(msg)
+  $('#message-info').addClass('bg-warning').show().text(msg)
+  setTimeout( function(){
+    $('#message-info').hide(3000,function(){
+      $('#message-info').removeClass('bg-warning')
+    })
+  }, 5000 )
+  //$('#message-info').addClass('bg-warning').show().text(msg)
 }
 
 function targetFromEvent(event,prevent,stop_propagation){
@@ -132,6 +139,9 @@ class HTML{
 }
 class Webservice{
   static call(url,data,callable_ok, callable_fail, method){
+    // spinner 
+    this.spinner(true)
+
     let ajax_data = { 
       url: url ,
       method: method ,
@@ -142,11 +152,21 @@ class Webservice{
       ajax_data.data = data
     }
     return $.ajax(ajax_data).done(function(data){
+      Webservice.spinner(false)
       callable_ok(data)
     })
     .fail(function(a,b,c){
+      Webservice.spinner(false)
       callable_fail(a,b,c)
     })
+  }
+
+  static spinner(show){
+    if(show){
+      $('.spinner').show()
+    }else{
+      $('.spinner').hide()
+    }
   }
 
   static cGet(url,callable, callable_fail){
@@ -162,6 +182,7 @@ class WebserviceBW extends Webservice{
   static fail(a,b,c){
     console.log('fail calling Ws',a,a.responseText,a.status,b,c)
     show_alert('Error getting information:' + a.responseText.substr(0,100))
+    PageC.reload()
   }
   static cGet(url,callable){
     super.cGet(url,callable,WebserviceBW.fail)
@@ -183,4 +204,6 @@ const CSRFTOKEN = getCookie('csrftoken');
 const PREFIX_TARGET = 'tgt_'
 const PREFIX_ORIGIN = 'tpl_'
 const TEMPLATE_BLOCK_ID = 'template-mst'
+let current_prj_id 
+let current_blg_id
 

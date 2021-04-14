@@ -19,10 +19,20 @@
 <script src="{% static 'blogwapp/jquery/jquery-3.6.0.min.js' %}" crossorigin="anonymous"></script>
   <!-- desktop view -->
 
-  <div class="container">
-    <div class="row border-bottom">
-      <div class="h1 text-center">Blogger</div>
-      <div>Msg info   -  <button class="btn btn-success" id="reload_page" data-url="{%  url 'projectapi:project-list' %}">Reload</button></div>
+  <div class="container h-100 mh-100">
+    <div class="row border-bottom justify-content-between">
+      <div class="col">
+        <div class="h1 text-left">Blogger &trade;</div>
+      </div>
+
+      <div class="col-6" id="message-info">
+        
+      </div>
+
+      <div class="col text-end">
+        <img class="spinner" style="width:30px; height:30px;" src="{% static 'loading.gif' %}" alt="loading...">
+        <button class="btn btn-success" id="reload_page" data-url="{%  url 'projectapi:project-list' %}">Reload</button>
+      </div>
     </div>
 
     <div class="row">
@@ -38,7 +48,9 @@
         <div id="tgt_block_project_create"></div>
 
         <!-- list begin -->
+        <div class="overflow-auto" style="max-height:400px">
         <div class="list-group" id="tgt_project_list">
+        </div>
         </div>
       <!-- end list group -->
 

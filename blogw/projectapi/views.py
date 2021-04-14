@@ -35,12 +35,19 @@ class BlogViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-      projectid = self.request.query_params.get('project_id')
-      if projectid:
-      #except KeyError:
-        return Blog.objects.filter(project__id=projectid).order_by('-creat_date')
-      
-      return Blog.objects.all().order_by('-creat_date')
+      queryset = Blog.objects.all()
+
+      if self.request.query_params.keys():
+        projectid = self.request.query_params.get('project_id')
+        text = self.request.query_params.get('text')
+        queryset = Blog.objects 
+        if projectid:
+          queryset = queryset.filter(project__id=projectid)
+
+        if text:
+          queryset = queryset.filter(text__icontains=text)
+
+      return queryset.order_by('-creat_date')
 
       
 

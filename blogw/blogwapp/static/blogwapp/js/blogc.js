@@ -3,6 +3,15 @@
 class BlogC extends Model{
   static block_create_name = 'block_blog_create'
 
+  static detail(project){
+    BlogC.list(project)
+
+    BlogCWrite.addUrl(project)
+
+    // overwrite project id
+    $('.tgt_current_project_id').val(project.id)
+  }
+
   static list(object){
     $WB.cGet(object.url_blogs, BlogCWrite.list)
   }
@@ -36,7 +45,7 @@ class BlogC extends Model{
   }
 
   static onAdded(data){
-    // update project list and so on
+    $H.resetCreateBlocks()
     ProjectC.loadList()
   }
 
@@ -153,5 +162,21 @@ class BlogCWrite{
     
     // hide current detail block 
     block_project.hide()
+  }
+}
+
+class BlogSearch{
+
+  static search(event){
+    event.preventDefault()
+    let search = $('#search_blog :input[name="text"]').val()
+    let id = $('#search_blog :input[name="project_id"]').val()
+    let url = $('#search_blog').attr('action')
+    
+    $WB.cGet(url + '?project_id=' + id + '&text=' + search,BlogSearch.onSearchReturn)
+  }
+
+  static onSearchReturn(blog_list){
+    BlogCWrite.list(blog_list)
   }
 }

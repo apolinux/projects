@@ -9,18 +9,21 @@
     <!-- search detail -->
     <div class="row justify-content-between align-middle">
      <div class="col-10">
-      <input class="form-control" type="text" name="search_detail" placeholder="search in blogs">
+      <form action="{% url 'projectapi:blog-list' %}" id="search_blog">
+      <input class="form-control" type="text" name="text" placeholder="search in blogs">
+      <input type="hidden" name="project_id" value="" class="tgt_current_project_id">
+      </form>
      </div>
-     <div class="col text-end" id="tgt_link_blog_create">
-     </div>  
+     <div class="col text-end" id="tgt_link_blog_create"> 
+     </div> 
     </div>
 
     <div class="row" id="tgt_block_blog_create">
     </div>
     <span id="csrf_token" style="display:none">{% csrf_token %}</span>
-    
-    <div class="list-group list-group-flush" id="tgt_blog_list">
-    
+    <div class="overflow-auto" style="max-height:400px">
+      <div class="list-group list-group-flush" id="tgt_blog_list">
+      </div>
     </div>
   </div>
 </div>

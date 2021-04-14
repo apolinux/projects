@@ -30,6 +30,11 @@
               <i class="bi bi-pencil-fill" ></i>
               </span>
             </div>
+
+            <div class="col-2 text-end link_project_delete" data-url_delete="{{ url }}">
+              <i class="bi-x-circle-fill" style="font-size: 1rem; color:red"  title="Delete this Project"></i>
+            </div>
+
           </div>  
         </a>
     {{/. }}
@@ -78,9 +83,10 @@
  <div class="border-bottom">
   <div class="d-flex justify-content-between">
     <h4 id="detail_title">{{ name }}</h4> 
-    <a href="{{ url_project_delete }}" id="link_project_delete">
+    {{!
+    <a href="{ { url_project_delete } }" id="link_project_delete">
       <i class="bi-x-circle-fill" style="font-size: 1.5rem; color:red"  title="Delete this project"></i>
-    </a>
+    </a> }}
   </div>
 
   <!-- Description -->
@@ -90,7 +96,7 @@
 
 <div id="tpl_blog_list">
   {{# .}}
-  <a href="{{ url }}" class="list-group-item list-group-item-action">
+  <a href="{{ url }}" class="list-group-item list-group-item-action block_blog_detail">
   <div class="row justify-content-between">
     <div class="col">
       <small>{{ creat_date }} </small>

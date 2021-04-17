@@ -13,9 +13,10 @@ class Model{
     this.create_blk = ! this.create_blk
   }
 
-  static showChildren(selector){
-    $(selector).children().show()
-  } 
+  /*static showChildren(selector){
+    //$(selector).children().show()
+    this.showChildren(selector)
+  } */
 
   static mustCreateBlock(){
     if(this.create_blk){
@@ -27,12 +28,13 @@ class Model{
     return true 
   }
 
-}
-
-class PageC {
-  // load project list
-  static reload(){
-    ProjectC.loadList()
+  static validateForm(form){
+    if(! form.checkValidity()) {
+      form.classList.add('was-validated')
+      show_alert('review your input and try again')
+      return false 
+    }
+    form.classList.remove('was-validated')
+    return true
   }
-
 }

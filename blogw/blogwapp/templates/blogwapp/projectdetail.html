@@ -4,14 +4,35 @@
     <!-- title -->
     <div class="row">
       <div class="col" id="tgt_project_detail">
+
+        <div class="border-bottom">
+          <div class="d-flex justify-content-between">
+            <h4 id="detail_title">&nbsp;</h4> 
+          </div>
+
+          <!-- Description -->
+          <div id="detail_desc">&nbsp;</div>
+        </div>
+
       </div>
     </div>
     <!-- search detail -->
-    <div class="row justify-content-between align-middle">
-     <div class="col-10">
-      <form action="{% url 'projectapi:blog-list' %}" id="search_blog">
-      <input class="form-control" type="text" name="text" placeholder="search in blogs">
-      <input type="hidden" name="project_id" value="" class="tgt_current_project_id">
+    <div class="row justify-content-between align-middle py-1">
+     <div class="col-10 py-1">
+      <form action="{% url 'projectapi:blog-list' %}" id="search_blog" class="row gy-2 gx-2 align-items-center">
+        <div class="col-10">
+         <div class="input-group">
+          <input class="form-control" type="search" name="text" placeholder="search in blogs" aria-label="text" aria-describedby="text">
+          <button class="btn btn-outline-secondary" type="button" id="link_clear_search_blog" title="clear search">
+            <i class="bi bi-x-circle-fill"></i>  
+          </button>
+         </div> 
+        </div>  
+
+        <div class="col-2">
+          <button type="button" class="btn btn-success" id="link_search_blog">Search</button>
+        </div>  
+          <input type="hidden" name="project_id" value="" class="tgt_current_project_id">
       </form>
      </div>
      <div class="col text-end" id="tgt_link_blog_create"> 
@@ -21,7 +42,7 @@
     <div class="row" id="tgt_block_blog_create">
     </div>
     <span id="csrf_token" style="display:none">{% csrf_token %}</span>
-    <div class="overflow-auto" style="max-height:400px">
+    <div class="overflow-auto" style="max-height:400px" id="parent_blog_list">
       <div class="list-group list-group-flush" id="tgt_blog_list">
       </div>
     </div>

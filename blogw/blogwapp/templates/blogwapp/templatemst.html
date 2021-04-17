@@ -45,15 +45,15 @@
   </div>
 
 <div id="tpl_block_project_create">
-    <form method="post" action="{{ url }}" class="form_modify">
+    <form method="post" action="{{ url }}" class="form_modify was-validated">
       <div class="mb-3">
       <label for="name">Name</label>
-      <input class="form-control" type="text" name="name" placeholder="Write name of project">
+      <input class="form-control" type="text" name="name" placeholder="Write name of project" required>
       </div>
 
       <div class="mb-3">
         <label for="description">Description</label>
-        <textarea class="form-control" name="description" placeholder="write new text here" rows="2" cols="60" ></textarea>
+        <textarea class="form-control" name="description" placeholder="write new text here" rows="2" cols="60" required></textarea>
       </div>
 
       {{{ csrf }}}
@@ -65,12 +65,12 @@
     <form method="put" action="{{ url }}" class="form_modify">
       <div class="mb-3">
       <label for="name">Name</label>
-      <input class="form-control" type="text" name="name" placeholder="Write name of project" value={{text}}>
+      <input class="form-control" type="text" name="name" placeholder="Write name of project" value={{text}} required>
       </div>
 
       <div class="mb-3">
         <label for="description">Description</label>
-        <textarea class="form-control" name="description" placeholder="write new text here" rows="2" cols="60" >{{ description }}</textarea>
+        <textarea class="form-control" name="description" placeholder="write new text here" rows="2" cols="60" required>{{ description }}</textarea>
       </div>
 
       {{{ csrf }}}
@@ -131,10 +131,10 @@
 
 <div id="tpl_block_blog_create"> 
   <div class="col form_modify">
-    <form method="post" action="{{ url }}">
+    <form method="post" action="{{ url }}" class="was-validated">
       <div class="mb-3">
         <label for="blog">New Blog</label>
-        <textarea class="form-control" name="text" placeholder="write new text here" rows="2" cols="60" ></textarea>
+        <textarea class="form-control" name="text" placeholder="write new text here" rows="2" cols="60" required></textarea>
       </div>
       <button type="button" class="btn btn-success" id="link_submit_blog_create">Add Blog</button>
       <input type="hidden" name="project_id" value="{{ project_id }}">
@@ -148,7 +148,7 @@
     <form method="post" action="{{ url }}">
       <div class="mb-3">
         <label for="blog">Update Blog</label>
-        <textarea class="form-control" name="text" placeholder="write new text here" rows="2" cols="60" >{{ text }}</textarea>
+        <textarea class="form-control" name="text" placeholder="write new text here" rows="2" cols="60" required>{{ text }}</textarea>
       </div>
       <button type="button" class="btn btn-success link_submit_blog_update">Update Blog</button>
       <button type="button" class="btn btn-warning link_cancel_blog_update">Cancel</button>

@@ -133,8 +133,8 @@ class HTML{
    * set the create block status to false for project and blog 
    */
   static resetCreateBlocks(){
-    ProjectC.resetCreateBlk()
-    BlogC.resetCreateBlk()
+    Project.resetCreateBlk()
+    Blog.resetCreateBlk()
   }
 }
 class Webservice{
@@ -170,6 +170,9 @@ class Webservice{
   }
 
   static cGet(url,callable, callable_fail){
+    if(url === undefined){
+      throw new Error('url is undefined')
+    }
     return this.call(url,null,callable, callable_fail,'get')
   }
 
@@ -179,10 +182,19 @@ class Webservice{
 }
 
 class WebserviceBW extends Webservice{
+  static callback_onfail
+
+  static registerOnFail(callback){
+    this.callback_onfail = callback
+  }
+
   static fail(a,b,c){
     console.log('fail calling Ws',a,a.responseText,a.status,b,c)
     show_alert('Error getting information:' + a.responseText.substr(0,100))
-    PageC.reload()
+    if(detect_loop++ == 2){
+      return 
+    }
+    WebserviceBW.callback_onfail()
   }
   static cGet(url,callable){
     super.cGet(url,callable,WebserviceBW.fail)
@@ -197,6 +209,47 @@ class WebserviceBW extends Webservice{
   }
 }
 
+function showChildren(selector){
+  $(selector).children().show()
+}
+
+function setAutoHeight(){
+  let height = window.innerHeight
+  let obj = document.getElementById('parent_project_list')
+  let size = obj.getBoundingClientRect()
+  // window height minus proj. title and main bar heights minus gap
+  //obj.style.maxHeight = ( height - (48 + 56 + 2 )) + 'px'
+  obj.style.maxHeight = ( height - size.y - 2) + 'px'
+
+  let obj2 = document.getElementById('parent_blog_list')
+  let size2 = obj2.getBoundingClientRect()
+  //obj2.style.maxHeight = ( height - (62 + 48 + 56 + 8 + 2 )) + 'px'
+  obj2.style.maxHeight = ( height - size2.y - 2) + 'px'
+  //console.log(obj.getBoundingClientRect(), obj2.getBoundingClientRect())
+}
+
+// on resize
+// disable right side: height: 0
+// work on left side 
+// while body.height > window.height do:
+// projectlistsize--
+// work on right side 
+// leftsideheight=0
+// while body.height > window.height do:
+// bloglistsize--
+// left sizeheight=previousvalue
+window.addEventListener('resize',onResize)
+
+function onResize(event){
+  //console.log('resizing')
+  setTimeout( () => setAutoHeight(),100)
+}
+
+function onLoadPage(){
+  Project.reload()
+  setAutoHeight()
+}
+
 // global constants
 const $WB = WebserviceBW
 const $H = HTML
@@ -206,4 +259,10 @@ const PREFIX_ORIGIN = 'tpl_'
 const TEMPLATE_BLOCK_ID = 'template-mst'
 let current_prj_id 
 let current_blg_id
+let detect_loop = 1
 
+// global settings
+$WB.registerOnFail(function(){
+  $H.resetCreateBlocks()
+  Project.reload()
+})

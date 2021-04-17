@@ -38,17 +38,35 @@
     <div class="row">
       <!-- left panel -->
       <div class="col">
-        <div class="d-flex justify-content-between">
-          <h3>Blog list</h3>
-          <a href="{% url 'projectapi:project-list' %}" id="project_add">
+        <div class="row justify-content-between">
+          <div class="col-2">
+            <h5>Projects</h5>
+          </div>
+          <!-- search project block -->
+          <div class="col-8">
+           <form action="{% url 'projectapi:project-list' %}" id="search_project" class="row gy-2 gx-2 align-items-center">
+            <div class="col">
+            <div class="input-group">
+              <input class="form-control" type="search" name="text" placeholder="search in projects" aria-label="text" aria-describedby="text">
+              <button class="btn btn-outline-secondary" type="button" id="link_clear_search_project" title="clear search">
+                <i class="bi bi-x-circle-fill"></i>  
+              </button>
+            </div> 
+            </div>  
+           </form>
+          </div> 
+          <!-- end search project block-->
+          <div class="col">
+           <a href="{% url 'projectapi:project-list' %}" id="project_add">
             <i class="bi-plus-circle-fill" style="font-size: 2rem; color:chartreuse"></i>
-          </a>
+           </a>
+          </div> 
         </div>
 
         <div id="tgt_block_project_create"></div>
 
         <!-- list begin -->
-        <div class="overflow-auto" style="max-height:400px">
+        <div id="parent_project_list" class="overflow-auto" style="max-height:400px">
         <div class="list-group" id="tgt_project_list">
         </div>
         </div>
@@ -70,7 +88,7 @@
   <script>const url_project_detail="{{ '/blogwapp/projects/' }}"</script>
   <script src="{% static 'blogwapp/js/mustache.js' %}" crossorigin="anonymous"></script>
    {# <script src="{% static 'blogwapp/js/template-html.js' %}" crossorigin="anonymous"></script> - #}
-  <script src="{% static 'blogwapp/js/pagec.js' %}" crossorigin="anonymous"></script>
+  <script src="{% static 'blogwapp/js/model.js' %}" crossorigin="anonymous"></script>
   <script src="{% static 'blogwapp/js/projectc.js' %}" crossorigin="anonymous"></script>
   <script src="{% static 'blogwapp/js/blogc.js' %}" crossorigin="anonymous"></script>
   <script src="{% static 'blogwapp/js/blogwapp.js' %}" crossorigin="anonymous"></script>

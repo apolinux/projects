@@ -11,6 +11,7 @@ from datetime import datetime,timezone
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
+from django.db.models import Q
 
 class ProjectViewSet(viewsets.ModelViewSet):
     """
@@ -21,10 +22,24 @@ class ProjectViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return Project.objects.annotate(
-            num_blogs=Count('blogs'),
-            last_modif =  Max('blogs__creat_date')
-        ).order_by('-update_date')
+      
+      queryset = Project.objects.all()
+
+      
+      if self.request.query_params.keys():
+        text = self.request.query_params.get('text')
+        queryset = Project.objects 
+        if text:
+          queryset = queryset.filter(Q(name__icontains=text) | Q(description__icontains=text) )
+
+      #return queryset.order_by('-creat_date')
+
+      return queryset.annotate(
+          num_blogs=Count('blogs'),
+          last_modif =  Max('blogs__creat_date')
+      ).order_by('-update_date')
+
+
 
 class BlogViewSet(viewsets.ModelViewSet):
     """
@@ -49,40 +64,4 @@ class BlogViewSet(viewsets.ModelViewSet):
 
       return queryset.order_by('-creat_date')
 
-      
 
-      
-
-
-"""class BlogProjectListView(generics.ListAPIView):
-  serializer_class = BlogProjectSerializer
-  permission_classes = [permissions.IsAuthenticated]
-  #filter_class = BlogPostListFilter
-  paginate_by = 10
-
-  def get_queryset(self):
-    return Blog.objects.filter(project_id=self.kwargs['project_id'])
-    """
-
-"""
-def date_diff_in_seconds(dt2, dt1):
-  timedelta = dt2 - dt1
-  return timedelta.days * 24 * 3600 + timedelta.seconds
-
-def days_from_seconds(seconds):
-  minutes, seconds = divmod(seconds, 60)
-  hours, minutes = divmod(minutes, 60)
-  days, hours = divmod(hours, 24)
-  return days
-	# return (days, hours, minutes, seconds)  
-
-def diffdays(dt1,dt2):
-  return days_from_seconds(date_diff_in_seconds(dt2,dt1))
-
-def diffdaysnow(dt1):
-  print('date',dt1)
-  if dt1 == '' :
-    return ''
-  dt2 = datetime.now(timezone.utc)
-  return days_from_seconds(date_diff_in_seconds(dt2,dt1))   
-  """

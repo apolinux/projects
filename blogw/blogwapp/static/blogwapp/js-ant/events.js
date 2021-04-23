@@ -49,7 +49,7 @@ peBlogSearch = new Proxy(new BlogSearch,handlerEvent)
 window.onload = onLoadPage
 
 // reloadMain
-document.getElementById('reload_page').addEventListener('click',peProjectList.request,false)
+//document.getElementById('reload_page').addEventListener('click',peProjectList.request,false)
 
 // on click Proyect
 $('#tgt_project_list').on('click','.project_detail',peProjectDetail.requestFromClick)

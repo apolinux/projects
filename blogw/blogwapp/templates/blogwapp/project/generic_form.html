@@ -1,0 +1,26 @@
+{%extends 'base.html' %}
+
+{%block content %}
+
+<h1>{{ action }} Project</h1>
+<div class="row">
+  <form method="post">
+    <div class="mb-3">
+      <label for="name" class="form-label">Name</label>
+      {% include '../field_snippet.html' with field=form.name %}
+      <input type="text" name="name" class="form-control" placeholder="write name" value="{{form.name.value|default_if_none:''}}" required>
+    </div>
+
+    <div class="mb-3">
+      <label for="description" class="form-label">Description</label>
+      {% include '../field_snippet.html' with field=form.description %}
+      <textarea name="description" class="form-control" placeholder="write description" required>{{form.description.value|default_if_none:''}}</textarea>
+    </div>
+
+    <input type="submit" value="Submit" class="btn btn-success">
+    {% csrf_token %}
+  </form>
+</div>
+
+
+{%endblock %}

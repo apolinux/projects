@@ -25,7 +25,11 @@ SECRET_KEY = 'h=2=6sf2wu$1(u7^%msxn_9r+0-7(dr%%%st%pu)!paheo3m^!'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+  'localhost'
+  ,'127.0.0.1'
+  ,'192.168.10.17'
+]
 
 
 # Application definition
@@ -128,3 +132,7 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     ]
 }
+
+# Redirect to home URL after login (Default redirects to /accounts/profile/)
+LOGIN_REDIRECT_URL = '/blogwapp'
+LOGOUT_REDIRECT_URL = '/accounts/login/'

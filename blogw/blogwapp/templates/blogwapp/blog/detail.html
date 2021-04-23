@@ -1,0 +1,35 @@
+{%extends 'base.html' %}
+
+{%block content %}
+
+<h1>Blog Detail</h1>
+
+<div class="bg-light bg-gradient">
+  <div class="row p-2 border">
+    <div class="col">
+      Date
+    </div>
+    <div class="col">
+      {{ object.creat_date }}
+    </div>
+  </div>
+
+  <div class="row p-2 border">
+    <div class="col">
+      Text
+    </div>
+    <div class="col">
+      {{ object.text }}
+    </div>
+  </div>
+</div>
+
+<div class="row py-2">
+  <div class="col">
+    <a href="{% url 'blogwapp:blog-list' object.project_id %}">Blogs</a>
+  </div>
+  <div class="col">
+    <a href="{% url 'blogwapp:project-list' %}">Projects</a>
+  </div>
+</div>
+{%endblock %}

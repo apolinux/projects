@@ -6,6 +6,13 @@ class Blog extends Model{
   static showList(){
     showChildren('#' +   PREFIX_TARGET + 'blog_list')
   }
+
+  static reload(){
+    let bl = new BlogList
+    bl.request({
+      url_blogs : document.getElementById('url_blogs').href
+    })
+  }
 }
 
 class BlogList{
@@ -96,7 +103,8 @@ class BlogDelete{
   }
 
   onDeleted(data){
-    Project.reload()
+    //Project.reload()
+    Blog.reload()
   }
 }
 
@@ -109,7 +117,9 @@ class BlogUpdate{
     //let item = targetFromEvent(event,true,true)
     event.stopPropagation()
     // create update template 
-    this.edit(blog)
+    //this.edit(blog)
+    let link = $(blog).data('url_edit')
+    location.href = link
   }
 
   edit(item){
@@ -174,174 +184,31 @@ class BlogSearch{
   }
 }
 
-/*class BlogC extends Model{
-  static block_create_name = 'block_blog_create'
+let peBlogList = new Proxy(new BlogList, handlerEvent)
+let peBlogDetail = new Proxy(new BlogDetail, handlerEvent)
+let peBlogAdd = new Proxy(new BlogAdd, handlerEvent)
+let peBlogDelete = new Proxy(new BlogDelete, handlerEvent)
+let peBlogUpdate = new Proxy(new BlogUpdate, handlerEvent)
+let peBlogSearch = new Proxy(new BlogSearch,handlerEvent)
 
-  /*static detail(project){
-    BlogC.list(project)
+// CreateBlog : link for show new blog form
+//$('#tgt_link_blog_create').on('click','#link_block_blog_create', peBlogAdd.request)
 
-    BlogCWrite.addUrl(project)
+// link for submit blog
+//$('#tgt_block_blog_create').on('click','#link_submit_blog_create',peBlogAdd.submit)
 
-    // overwrite project id
-    $('.tgt_current_project_id').val(project.id)
-  }
+// updateBlog
+$('#tgt_blog_list').on('click','.link_blog_edit',peBlogUpdate.requestPage)
+//$('#tgt_blog_list').on('click','.link_submit_blog_update', peBlogUpdate.submitPage )
+//$('#tgt_blog_list').on('click','.link_cancel_blog_update',peBlogUpdate.cancel)
 
-  static list(object){
-    $WB.cGet(object.url_blogs, BlogCWrite.list)
-  }*/
+//avoid click on blog
+//$('#tgt_blog_list').on('click','.block_blog_detail', function(event){event.preventDefault()})
 
-  /**
-   * add a new blog 
-   * - copy tpl new 
-   * - add to db 
-   * - refresh blog list and project list 
-   * 
-   * @param {Event} event 
-   */
-  /*static blockAdd(event){
-    let itemclicked = targetFromEvent(event)
+// deleteBlog
+$('#tgt_blog_list').on('click','.link_delete_blog',peBlogDelete.request);
 
-    if(! BlogC.mustCreateBlock()) { 
-      return 
-    }
-    
-    BlogCWrite.templateNew(itemclicked)
-  }
-
-  
-  static postAdd(event){
-    let item = targetFromEvent(event)
-
-    let form = $(item.form)[0]
-    if(! Model.validateForm(form)){
-      return 
-    }
-
-    let form_data = $(item.form).serialize()
-    let url = item.form.action
-    
-    $WB.cPost(url, form_data, BlogC.onAdded)
-  }
-
-  static onAdded(data){
-    $H.resetCreateBlocks()
-    ProjectC.reload()
-  }
-
-  static delete(event){
-    let item = targetFromEvent(event)
-    // warn user
-    if(! confirm('Really want to delete this item?')){
-      return 
-    }
-    let url = $(item).data('url_delete_blog')
-    //ondelete 
-    let data = {
-      csrfmiddlewaretoken:CSRFTOKEN
-    }
-
-    $WB.callBw(url,data,BlogC.onDeleted,'delete')
-  }
-
-  static onDeleted(data){
-    ProjectC.reload()
-  }
-
-  static edit(event){
-    let item = targetFromEvent(event,true,true)
-    // create update template 
-    BlogCWrite.edit(item)
-  }
-
-  static cancelUpdate(event){
-    let item = targetFromEvent(event)
-
-    let block = $(item).parent()
-    BlogC.showList()
-
-    block.remove()
-  }
-
-  static showList(){
-    super.showChildren('#' +   PREFIX_TARGET + 'blog_list')
-  }
-
-  static postUpdate(event){
-    let item = targetFromEvent(event)
-    // submit 
-    let form_data = $(item.form).serialize()
-    let url = item.form.action
-    
-    $WB.callBw(url, form_data, BlogC.onUpdated,'patch')
-  }
-
-  static onUpdated(data){
-    $H.removeForms()
-    $H.resetCreateBlocks()
-    BlogC.showList()
-    ProjectC.reload()
-  }
-
-  static search(){}
-}
-*/
-
-/*class BlogCWrite{
-
-  /**
-   * add crate blog url link to blog side
-   * @param {object} project 
-   */
-  /*static addUrl(project){
-    $H.write('link_blog_create',{
-      url : project.url_new_blog ,
-      id : project.id
-    })
-
-    // clear any forms on blog side 
-    //clear add blog 
-    $H.clear('block_blog_create')
-  }*/
-
-  /**
-   * list blogs 
-   * @param {array} list 
-   */
-  /*static list(list){
-    $H.write('blog_list',list)
-  }*/
-
-  /**
-   * create a new blog form
-   * @param {object} item 
-   */
-  /*static templateNew(item){
-    let project_id = $(item).data('project-id')
-
-    $H.write('block_blog_create',{
-      url        : item.href,
-      csrf : getCsrfHtml(),
-      project_id : project_id
-    })
-  }
-
-  static edit(item){
-    let block_project = $(item).parent().parent()
-    
-    $H.removeForms()
-
-    BlogC.showList()
-    const data ={
-      url : block_project.attr('href') ,
-      text : $(block_project).find('.blog_detail_text').html().trim() ,
-    }
-
-    let html_update = $H.render('block_blog_update',data)
-    
-    $(block_project).before(html_update)
-    
-    // hide current detail block 
-    block_project.hide()
-  }
-}*/
+$('#search_blog').on('submit', peBlogSearch.request)
+$('#link_search_blog').click(  peBlogSearch.request)
+$('#link_clear_search_blog').click( peBlogSearch.clear)
 

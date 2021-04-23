@@ -1,0 +1,30 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap CSS -->
+  <link href="{% static 'blogwapp/bootstrap-5.0.0-beta2-dist/css/bootstrap.min.css' %}" rel="stylesheet" crossorigin="anonymous">
+  <link href="{% static 'blogwapp/font/bootstrap-icons.css' %}" rel="stylesheet">
+  <title>Blog Manager - Apolinux</title>
+  <link rel="shortcut icon" href="{% static 'favicon.ico'%}" type="image/x-icon">
+  <link rel="icon" href="{% static 'favicon.ico'%}" type="image/x-icon">
+  {%block head %}{% endblock %}
+</head>
+
+<body>
+<div class="position-absolute top-50 start-50 translate-middle">
+  <img class="spinner" style="width:50px; height:50px; display:none" src="{% static 'loading.gif' %}" alt="loading...">
+</div>
+<script src="{% static 'blogwapp/jquery/jquery-3.6.0.min.js' %}" crossorigin="anonymous"></script>
+  {% include './navbar.html' %}
+  <div class="container" id="content">
+        {% block content %}{% endblock %}
+  </div>
+  <script src="{% static 'blogwapp/bootstrap-5.0.0-beta2-dist/js/bootstrap.bundle.min.js' %}" crossorigin="anonymous"></script>  
+</body>
+</html>

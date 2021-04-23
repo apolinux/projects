@@ -9,22 +9,9 @@ app_name = 'blogwapp'
 #router.register(r'users', views.UserViewSet)
 
 urlpatterns = [
-  # ex: /polls/
-  #path('', views.IndexView.as_view(), name='index'),
-  # ex: /polls/5/
-  #path('<int:pk>/', views.ProjectDetailView.as_view(), name='project-detail'),
-  # ex: /polls/5/results/
-  #path('<int:pk>/blogs/', views.BlogListView.as_view(), name='blog-list'),
-  # ex: /polls/5/vote/
-  #path('<int:pk>/vote/', views.vote, name='vote'),
-
   # /blogwapp/ => index, pag. Principal, lista de proyectos (GET)
-  path('', views.IndexView.as_view(), name='index'),
-
-  # /blogwapp/projects/ => lista de proyectos (GET AJAX)
-  #path('projects/', views.ProjectListView.as_view(), name='project-list'),
-  #path('projects/', views.projectList, name='project-list'),
-  #path('projects/', views.ProjectListViewSet, name='project-list'),
+  #path('', views.IndexView.as_view(), name='index'),
+  path('',views.ProjectListView.as_view(),name='project-list') ,
 
   # blogwapp/ID/  => detalle del proyecto  (GET AJAX)
   path('<int:pk>/', views.ProjectDetailView.as_view(), name='project-detail'),

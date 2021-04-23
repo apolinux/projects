@@ -20,5 +20,6 @@ urlpatterns = [
     path('blogwapp/', include('blogwapp.urls')),
     path('admin/', admin.site.urls),
     path('projectapi/',include('projectapi.urls'))
+    ,path('accounts/',include('django.contrib.auth.urls'))
 ]
 

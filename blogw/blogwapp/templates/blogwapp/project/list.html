@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content%}
+    
+
+     <button class="btn btn-success d-none" id="reload_page" data-url="{%  url 'projectapi:project-list' %}">Reload</button>
+
+    <div class="row ">
+      <div class="col-10">
+      <h5>List Projects </h5>
+      </div>
+
+      <div class="col">
+        <a href="{% url 'blogwapp:project-add' %}" id="project_add">
+          <i class="bi-plus-circle-fill" style="font-size: 2rem; color:chartreuse"></i>
+        </a>
+      </div>
+    </div>
+
+
+    <div class="row">
+      <form action="{% url 'projectapi:project-list' %}" id="search_project" class="row gy-2 gx-2 align-items-center">
+        <div class="col">
+        <div class="input-group">
+          <input class="form-control" type="search" name="text" placeholder="search in projects" aria-label="text" aria-describedby="text">
+          <button class="btn btn-outline-secondary" type="button" id="link_clear_search_project" title="clear search">
+            <i class="bi bi-x-circle-fill"></i>  
+          </button>
+        </div> 
+        </div>  
+        </form>
+    </div>
+
+     <!-- <div id="tgt_block_project_create"></div> -->
+
+    <!-- list begin -->
+    <div id="parent_project_list" >
+      <div class="list-group" id="tgt_project_list">
+      </div>
+    </div>
+    <!-- end list group -->
+
+    </div>
+
+  </div>
+  <script src="{% static 'blogwapp/js/mustache.js' %}" crossorigin="anonymous"></script>
+  <script src="{% static 'blogwapp/js/model.js' %}" crossorigin="anonymous"></script>
+  <script src="{% static 'blogwapp/js/projectc.js' %}" crossorigin="anonymous"></script>
+  <script src="{% static 'blogwapp/js/blogc.js' %}" crossorigin="anonymous"></script>
+  <script src="{% static 'blogwapp/js/main.js' %}" ></script>
+  <script src="{%static 'blogwapp/js/projectload.js' %}"></script>
+  {% include "../templatemst.html" %}
+
+  {% endblock %}

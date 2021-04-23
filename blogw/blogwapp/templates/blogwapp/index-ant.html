@@ -19,10 +19,16 @@
 <script src="{% static 'blogwapp/jquery/jquery-3.6.0.min.js' %}" crossorigin="anonymous"></script>
   <!-- desktop view -->
 
-  <div class="container h-100 mh-100">
+  <div class="container">
+  <div class="position-absolute bottom-0 end-0"> 
+    <a href="{% url 'projectapi:project-list' %}" id="project_add">
+      <i class="bi-plus-circle-fill" style="font-size: 2rem; color:chartreuse"></i>
+    </a>
+  </div>
+    {% comment %}
     <div class="row border-bottom justify-content-between">
       <div class="col">
-        <div class="h1 text-left">Blogger &trade;</div>
+        <div class="h1 text-left">Projects&trade;</div>
       </div>
 
       <div class="col-6" id="message-info">
@@ -34,14 +40,83 @@
         <button class="btn btn-success" id="reload_page" data-url="{%  url 'projectapi:project-list' %}">Reload</button>
       </div>
     </div>
+    {% endcomment %}
+    <button class="btn btn-success d-none" id="reload_page" data-url="{%  url 'projectapi:project-list' %}">Reload</button>
+    <!-- nav menu -->
 
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">Projects &trade;</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="#">Setup</a>
+            </li>
+          <!-- <li class="nav-item">
+              <a class="nav-link" href="#">other link</a>
+            </li> -->
+            <!-- <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Dropdown
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="#">Action</a></li>
+                <li><a class="dropdown-item" href="#">Another action</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="#">Something else here</a></li>
+              </ul>
+            </li> -->
+            <!--<li class="nav-item">
+              <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+            </li> -->
+          </ul>
+        <!-- <form class="d-flex">
+            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success" type="submit">Search</button>
+          </form> -->
+        </div>
+      </div>
+    </nav>
+    <!-- end nav menu -->
+
+    <div class="row">
+      <h5>List Projects </h5>
+    </div>
+
+    <div class="row">
+      <form action="{% url 'projectapi:project-list' %}" id="search_project" class="row gy-2 gx-2 align-items-center">
+        <div class="col">
+        <div class="input-group">
+          <input class="form-control" type="search" name="text" placeholder="search in projects" aria-label="text" aria-describedby="text">
+          <button class="btn btn-outline-secondary" type="button" id="link_clear_search_project" title="clear search">
+            <i class="bi bi-x-circle-fill"></i>  
+          </button>
+        </div> 
+        </div>  
+        </form>
+    </div>
+
+     <div id="tgt_block_project_create"></div>
+
+    <!-- list begin -->
+    <div id="parent_project_list" >
+      <div class="list-group" id="tgt_project_list">
+      </div>
+    </div>
+    <!-- end list group -->
+
+    {% comment %}
     <div class="row">
       <!-- left panel -->
       <div class="col">
         <div class="row justify-content-between">
           <div class="col-2">
-            <h5>Projects</h5>
+            <h5>List Projects</h5>
           </div>
+
           <!-- search project block -->
           <div class="col-8">
            <form action="{% url 'projectapi:project-list' %}" id="search_project" class="row gy-2 gx-2 align-items-center">
@@ -56,23 +131,24 @@
            </form>
           </div> 
           <!-- end search project block-->
-          <div class="col">
+          <!-- <div class="col">
            <a href="{% url 'projectapi:project-list' %}" id="project_add">
             <i class="bi-plus-circle-fill" style="font-size: 2rem; color:chartreuse"></i>
-           </a>
+           </a> -->
           </div> 
         </div>
 
         <div id="tgt_block_project_create"></div>
 
         <!-- list begin -->
-        <div id="parent_project_list" class="overflow-auto" style="max-height:400px">
+        <div id="parent_project_list" >
         <div class="list-group" id="tgt_project_list">
         </div>
         </div>
       <!-- end list group -->
 
       </div>
+      {%comment %}
       <!-- right panel -->
       <div class="col-8 border-start">
 
@@ -82,7 +158,9 @@
         {# </div> #}
         
       </div>
+      {% endcomment %}
     </div>
+
   </div>
   <script>const url_template="{% static 'blogwapp/js/template.mst' %}"</script>
   <script>const url_project_detail="{{ '/blogwapp/projects/' }}"</script>

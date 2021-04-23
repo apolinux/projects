@@ -43,7 +43,7 @@ class ProjectList{
   }
 
   request(){
-    $H.clear(this.block_create_name)
+    //$H.clear(this.block_create_name)
     const url = getUrl('#reload_page')
     let method = this.show.bind(this)
     $WB.cGet(url,method)
@@ -57,11 +57,10 @@ class ProjectList{
       return 
     }
     let project = this.getCurrent(prj_list)
-    //this.setActiveProject(project)
     Project.setActive(project)
-    //ProjectC.detail(project)
-    let projd = new ProjectDetail
-    projd.requestDb(project)
+    
+    //let projd = new ProjectDetail
+    //projd.requestDb(project)
   }
 
   write(project_list){
@@ -95,10 +94,10 @@ class ProjectDetail{
   // called from clicked project block 
   requestFromClick(item){
     let url = item.href
-  
-    current_prj_id = $(item).data('id')
+    console.log('on detail, item,url',item,url)
+    /*current_prj_id = $(item).data('id')
     let method = this.show.bind(this)
-    $WB.cGet(url,method)
+    $WB.cGet(url,method)*/
   }
 
   show(project){
@@ -177,8 +176,8 @@ class ProjectDelete{
 class ProjectUpdate{
   requestPage(project, event){
     event.stopPropagation()
-    // create update template 
-    this.write(project)
+    let link = $(project).data('url_edit')
+    location.href = link
   }
 
   /**
@@ -265,238 +264,29 @@ class ProjectSearch{
     this.request()
   }
 }
-/*class ProjectC extends Model {
 
-  static block_create_name = 'block_project_create'
-  
-  /*static reload(){
-    ProjectC.loadList()
-  }
+const peProjectList = new Proxy(new ProjectList, handlerEvent)
+const peProjectDetail = new Proxy(new ProjectDetail, handlerEvent)
+//const peProjectAdd = new Proxy(new ProjectAdd, handlerEvent)
+const peProjectDelete = new Proxy(new ProjectDelete, handlerEvent)
+const peProjectUpdate = new Proxy(new ProjectUpdate, handlerEvent)
+const peProjectSearch = new Proxy(new ProjectSearch,handlerEvent)
 
-  static loadList(){
-    $H.clear(this.block_create_name)
+// on click Proyect
+//$('#tgt_project_list').on('click','.project_detail',peProjectDetail.requestFromClick)
 
-    const url = getUrl('#reload_page')
-    $WB.cGet(url,ProjectC.list)
-  }
+// createProyect
+//document.getElementById('project_add').addEventListener('click',peProjectAdd.request,false)
 
-  // write to html
-  static list(prj_list){
-    ProjectWriteC.list(prj_list)
-    if(prj_list.length < 1){
-      ProjectC.clearRightSide()
-      return 
-    }
-    let project = ProjectC.getCurrent(prj_list)
-    ProjectC.setActiveProject(project)
-    ProjectC.detail(project)
-  }
+//$('#tgt_block_project_create').on('click','#link_submit_project_create',peProjectAdd.submit)
 
-  static setActiveProject(project){
-    //console.log('set active prj, proj',project)
-    $(`#tgt_project_list a.project_detail`).removeClass('active')
-    $(`#tgt_project_list a.project_detail[data-id="${project.id}"]`).addClass('active')
-  }
+$('#tgt_project_list').on('click','.link_project_edit',peProjectUpdate.requestPage)
+//$('#tgt_project_list').on('click','.link_submit_project_update',peProjectUpdate.submitPage)
+//$('#tgt_project_list').on('click','.link_cancel_project_update',peProjectUpdate.cancel)
 
-  static clearRightSide(){
-    // clear project detail 
-    ProjectWriteC.detail({})
-    //clear blog list 
-    BlogCWrite.list([])
-    //disable add blog link
-    BlogCWrite.addUrl({})
+//deleteProyect
+$('#tgt_project_list').on('click','.link_project_delete',peProjectDelete.request)
 
-    // overwrite project id
-    $('.tgt_current_project_id').val('')
-  }
-
-  static getCurrent(prj_list){
-    let project = prj_list[0]
-    // filter by id 
-    if(current_prj_id !== undefined ){
-      let new_list = prj_list.filter(function(item){
-        return item.id == current_prj_id
-      })
-      if(new_list.length > 0){
-        project = new_list[0]
-      }
-    }
-    return project 
-  }*/
-
-  /*static detailFromAjax(url){
-    $WB.cGet(url,ProjectC.detail)
-  }
-
-  static onDetail(event){
-    let itemclicked = targetFromEvent(event)
-    let target = itemclicked.href
-    //console.log('on prj detail,itemclicked',itemclicked)
-    current_prj_id = $(itemclicked).data('id')
-    ProjectC.detailFromAjax(target)
-  }
-
-  static onDetail(item){
-    //let itemclicked = targetFromEvent(event)
-    let target = item.href
-    
-    current_prj_id = $(item).data('id')
-    ProjectC.detailFromAjax(target)
-  }*/
-
-  /**
-   * display project detail and do blog listing
-   * if called from reload, project is defined, is the list of projects
-   * if called from clicked project, project is event 
-   */
-  /*static detail(project){
-    ProjectWriteC.detail(project)
-    BlogC.detail(project)
-  }*/
-
-  /*static add(item){
-    ProjectC.showList()
-    // EYE: can't use this for call methods here because is called from an Event
-    if(! Project.mustCreateBlock()) { 
-      return 
-    }
-    // create html block
-    ProjectWriteC.add(item)
-  }*/
-
-  /**
-   * on submit add project 
-   * @param {*} event 
-   */
-  /*static postAdd(item){
-    let form = $(item.form)[0]
-    if(! Model.validateForm(form)){
-      return 
-    }
-
-    let form_data = $(item.form).serialize()
-    let url = item.form.action
-    
-    $WB.cPost(url, form_data, ProjectC.onAdded)
-  }
-
-  static onAdded(data){
-    $H.resetCreateBlocks()
-    ProjectC.reload()
-  }*/
-
-  /*static edit(event){
-    let item = targetFromEvent(event,true,true)
-    // create update template 
-    ProjectWriteC.edit(item)
-  }
-
-  static cancelUpdate(event){
-    let item = targetFromEvent(event)
-
-    let block = $(item).parent()
-    ProjectC.showList()
-
-    block.remove()
-    $H.resetCreateBlocks()
-  }
-
-  static showList(){
-    super.showChildren('#' +   PREFIX_TARGET + 'project_list')
-  }
-
-  static postUpdate(event){
-    let item = targetFromEvent(event)
-    // submit 
-    let form_data = $(item.form).serialize()
-    let url = item.form.action
-    
-    $WB.callBw(url, form_data, ProjectC.onUpdated,'put')
-  }
-
-  /**
-   * actions:
-   * - remove modify form(s) 
-   * - reload page 
-   * @param {*} data 
-   */
-  /*static onUpdated(data){
-    $H.removeForms()
-    $H.resetCreateBlocks()
-    ProjectC.showList()
-    ProjectC.reload()
-  }
-
-  /*static delete(event){
-    let item = targetFromEvent(event)
-    if(! confirm('Really want to delete this item?')){
-      return 
-    }
-
-    //let url = item.href
-    let url = $(item).data('url_delete')
-    
-    $WB.callBw(url,{},ProjectC.onDeleted,'delete')
-  }
-
-  static onDeleted(data){
-    ProjectC.reload()
-  }
-
-  static search(){}
-}
-
-/*let ProjectWriteC = class{
-  static list(data){
-    $H.write('project_list', data)
-  }
-
-  static detail(info){
-    $H.write('project_detail', info)
-  }
-
-  static add(item){
-    $H.removeForms()
-
-    $H.write('block_project_create',{
-      url  : item.href,
-      csrf : getCsrfHtml(),
-    })
-  }
-
-  /**
-   * edit project item 
-   * 
-   * - se obtiene el div objeto padre
-   * - se agrega el update form en el nodo anterior con .before
-   * - se oculta el div objeto (con hide() )
-   * si hace submit, se quita el form y se actualizar
-   * si hace cancel, se quita el form y reaparece el div objeto(con show)
-   * @param {*} item 
-   */
-  /*static edit(item){
-    // 1. get dom object to edit 
-    let block_project = $(item).parent().parent()
-    
-    $H.removeForms()
-
-    ProjectC.showList()
-    // 2. get previous neighbour or parent 
-    // 3. crear div con el formulario 
-    // los detalles se obtienen del html existente
-    const data ={
-      url : block_project.attr('href') ,
-      text : $(block_project).find('.project_detail_text').html().trim() ,
-      description : $(block_project).find('.project_detail_description').html().trim()
-    }
-
-    // 4. add formulary block to this parent 
-    let html_update = $H.render('block_project_update',data)
-    
-    $(block_project).before(html_update)
-    
-    // hide current detail block 
-    block_project.hide()
-  }
-} */
-
+// search input 
+$('#search_project').on('submit',peProjectSearch.request)
+$('#link_clear_search_project').click(peProjectSearch.clear)

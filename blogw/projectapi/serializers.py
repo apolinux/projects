@@ -8,10 +8,12 @@ class BlogSerializer(serializers.HyperlinkedModelSerializer):
   creat_date = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S", required=False, read_only=True)
   url_delete_blog = serializers.SerializerMethodField()
   url = serializers.HyperlinkedIdentityField(
-        view_name='projectapi:blog-detail',read_only=True) 
+        view_name='blogwapp:blog-detail',read_only=True) 
+  url_update = serializers.HyperlinkedIdentityField(
+        view_name='blogwapp:blog-update',read_only=True)       
   class Meta:
     model = Blog
-    fields = ['id', 'text', 'project_id','creat_date','url_delete_blog','url'] 
+    fields = ['id', 'text', 'project_id','creat_date','url_delete_blog','url','url_update'] 
 
   def get_url_delete_blog(self,obj):
     request = self.context.get('request')
@@ -30,15 +32,18 @@ class ProjectSerializer(serializers.HyperlinkedModelSerializer):
   days_ago = serializers.SerializerMethodField()
   last_blog = BlogSerializer(read_only=True)
   url = serializers.HyperlinkedIdentityField(
-        view_name='projectapi:project-detail',read_only=True) 
+        #view_name='projectapi:project-detail',read_only=True) 
+        view_name='blogwapp:project-detail',read_only=True) 
   url_blogs = serializers.SerializerMethodField()
   creat_date = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S", required=False, read_only=True)
   url_new_blog = serializers.SerializerMethodField()
   url_project_delete = serializers.SerializerMethodField()
+  url_update = serializers.HyperlinkedIdentityField(
+        view_name='blogwapp:project-update',read_only=True) 
   
   class Meta:
     model = Project
-    fields = ['url','id', 'name', 'creat_date', 'description', 'num_blogs','last_modif','days_ago', 'last_blog','url_blogs','url_new_blog','update_date','url_project_delete'] 
+    fields = ['url','id', 'name', 'creat_date', 'description', 'num_blogs','last_modif','days_ago', 'last_blog','url_blogs','url_new_blog','update_date','url_project_delete','url_update'] 
   
   def get_url_blogs(self,obj):
     request = self.context.get('request')
